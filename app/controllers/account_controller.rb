@@ -14,15 +14,10 @@ class AccountController < ApplicationController
     end
 
     def show
-        account = Account.find_by(number: params[:acc_number ].to_i)
+        account = find_account(params)
         if !account
-            render json: {
-                status: 404,
-                message: "Missing Account",
-                data: {
-                    account: account
-                }
-            }, status: :ok
+            # calling acc not found method
+            acc_not_found
         else
             render json: {
                 status: 200,
@@ -30,7 +25,7 @@ class AccountController < ApplicationController
             data: {
                     account: account
                 }
-            }
+            }, status: :ok
         end
     end
 
@@ -63,9 +58,52 @@ class AccountController < ApplicationController
         # render json: params
     end
 
+    def update
+        acc_number = params[:acc_number]
+        account = find_account(params)
+        if !account
+            acc_not_found
+        else
+            # account.name = params[:name]
+            # account.number = params[:number].to_i
+            # account.amount = params[:amount].to_f
+            # account.is_active = params[:is_active]
+            # account.user_full_name = params[:user_full_name]
+            # account.save
+
+            account.update(account_update_params)
+
+            render json: {
+                status: 200,
+                message: "Account update Successfully",
+                data: {
+                        account: account
+                    }
+            }, status: :created
+        end
+    end
+
     private
 
     def account_params
         params.permit(:number, :name, :amount, :is_active, :user_full_name)
+    end
+
+    def account_update_params
+        params.permit(:name, :amount, :is_active, :user_full_name)
+    end
+
+    def find_account(params)
+        Account.find_by(number: params[:acc_number ].to_i)
+    end
+
+    def acc_not_found     
+        render json: {
+            status: 404,
+            message: "Missing Account",
+            data: {
+                account: account
+            }
+        }, status: :not_found
     end
 end

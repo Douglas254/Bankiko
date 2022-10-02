@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   get '/accounts/:acc_number', to: "account#show"
   post '/accounts/new', to: "account#create"
   # post '/accounts/params', to: "account#check_params"
+  patch '/accounts/edit/:acc_number', to: "account#update"
 end
