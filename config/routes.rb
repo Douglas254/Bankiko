@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :defaulters
   get '/accounts', to: "account#index"
   get '/accounts/:acc_number', to: "account#show"
   post '/accounts/new', to: "account#create"
