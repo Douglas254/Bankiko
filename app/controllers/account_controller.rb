@@ -83,6 +83,17 @@ class AccountController < ApplicationController
         end
     end
 
+    def destroy
+        acc_number = params[:acc_number]
+        account = find_account(params)
+        if !account
+            acc_not_found
+        else
+            account.destroy
+            index
+        end
+    end
+
     private
 
     def account_params
@@ -102,7 +113,7 @@ class AccountController < ApplicationController
             status: 404,
             message: "Missing Account",
             data: {
-                account: account
+                account: nil
             }
         }, status: :not_found
     end
